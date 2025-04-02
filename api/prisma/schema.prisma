@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // ou "mysql" selon ton choix
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  photoUrl  String
+  reservations Reservation[]
+}
+
+model Desk {
+  id         Int      @id @default(autoincrement())
+  deskNumber Int      @unique
+  isAvailable Boolean @default(true)
+  reservations Reservation[]
+}
+
+model Reservation {
+  id     Int      @id @default(autoincrement())
+  date   DateTime
+  user   User     @relation(fields: [userId], references: [id])
+  userId Int
+  desk   Desk     @relation(fields: [deskId], references: [id])
+  deskId Int
+}

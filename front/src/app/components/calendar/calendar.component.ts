@@ -1,57 +1,62 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AvailabilityService } from '../../services/availability.service';
+import { AvailabilityWeek } from '../../interfaces/availability';
 
 @Component({
   selector: 'app-calendar',
+  standalone: true,
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
-  imports: [CommonModule],
+  imports: [CommonModule]
 })
 export class CalendarComponent implements OnInit {
-  weeks: { date: Date; color: string }[][] = [];
+  weeks: {
+    date: Date;
+    available?: number;
+    isDisabled: boolean;
+    color: string;
+  }[][] = [];
+
+  currentMonth = '';
+  currentYear = 0;
+
+  constructor(private availabilityService: AvailabilityService) {}
 
   ngOnInit(): void {
-    const days = [
-      { date: new Date('2025-04-07'), color: 'bg-dark-gray' },
-      { date: new Date('2025-04-08'), color: 'bg-gray' },
-      { date: new Date('2025-04-09'), color: 'bg-teal' },
-      { date: new Date('2025-04-10'), color: 'bg-yellow' },
-      { date: new Date('2025-04-11'), color: 'bg-red' },
-      { date: new Date('2025-04-12'), color: 'bg-gray' },
-      { date: new Date('2025-04-13'), color: 'bg-gray' },
-      { date: new Date('2025-04-14'), color: 'bg-teal' },
-      { date: new Date('2025-04-15'), color: 'bg-yellow' },
-      { date: new Date('2025-04-16'), color: 'bg-red' },
-      { date: new Date('2025-04-17'), color: 'bg-gray' },
-      { date: new Date('2025-04-18'), color: 'bg-gray' },
-      { date: new Date('2025-04-19'), color: 'bg-teal' },
-      { date: new Date('2025-04-20'), color: 'bg-yellow' },
-      { date: new Date('2025-04-21'), color: 'bg-red' },
-      { date: new Date('2025-04-22'), color: 'bg-gray' },
-      { date: new Date('2025-04-23'), color: 'bg-gray' },
-      { date: new Date('2025-04-24'), color: 'bg-teal' },
-      { date: new Date('2025-04-25'), color: 'bg-yellow' },
-      { date: new Date('2025-04-26'), color: 'bg-red' },
-      { date: new Date('2025-04-27'), color: 'bg-gray' },
-    ];
-    this.weeks = this.getWeeks(days);
+    this.availabilityService.getAvailability().subscribe((data: AvailabilityWeek[]) => {
+      this.weeks = data.map((week) =>
+        week.days.map((day) => {
+          const dateObj = new Date(day.date);
+          return {
+            date: dateObj,
+            available: day.availableDesks ?? undefined,
+            isDisabled: day.isDisabled,
+            color: day.isDisabled ? 'bg-dark-gray-custom' : this.getColor(day.availableDesks!),
+          };
+        })
+
+      );
+
+      if (this.weeks.length && this.weeks[0].length) {
+        const firstDate = this.weeks[0][0].date;
+        this.currentMonth = firstDate.toLocaleString('default', { month: 'long' });
+        this.currentYear = firstDate.getFullYear();
+      }
+    });
   }
 
-  getWeeks(days: { date: Date; color: string }[]): { date: Date; color: string }[][] {
-    const weeks: { date: Date; color: string }[][] = [];
-    let currentWeek: { date: Date; color: string }[] = [];
+  getColor(availableDesks: number): string {
+    if (availableDesks === 0) return 'bg-red-500';
+    if (availableDesks <= 5) return 'bg-yellow-500';
+    if (availableDesks <= 10) return 'bg-teal-500';
+    return 'bg-gray-300';
+  }
 
-    days.forEach((day) => {
-      if (currentWeek.length > 0 && day.date.getDay() === 1) {
-        weeks.push(currentWeek);
-        currentWeek = [];
-      }
-      currentWeek.push(day);
-    });
+  onDayClick(day: { date: Date; isDisabled: boolean }): void {
+    if (day.isDisabled) return;
 
-    if (currentWeek.length > 0) {
-      weeks.push(currentWeek);
-    }
-    return weeks;
+    // ici tu peux ouvrir une modale ou appeler une méthode pour réserver
+    console.log('Date sélectionnée pour réservation :', day.date.toISOString());
   }
 }

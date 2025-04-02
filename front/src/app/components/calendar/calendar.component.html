@@ -1,13 +1,25 @@
 <div class="py-16 px-32 ml-[250px]">
-  <div class="bg-gray-800 text-white p-4 mx-4 rounded-t-md flex justify-between">
+  <div class="bg-gray-800 text-white p-4 mx-4 rounded-t-md flex justify-between items-center">
     <h2 class="text-lg font-bold">Disponibilités des places</h2>
-    <span>AVRIL - 2025</span>
+    <span>{{ currentMonth | uppercase }} - {{ currentYear }}</span>
   </div>
+
   <div class="grid grid-cols-3 gap-8 bg-white p-4 rounded-b-md">
     <div *ngFor="let week of weeks" class="flex flex-col gap-4">
-      <div *ngFor="let day of week" class="text-left flex gap-2 p-4" [ngClass]="day.color">
-        <div class="font-bold">{{ day.date | date: 'EEE' }}</div>
-        <div>{{ day.date | date: 'd' }}</div>
+      <div
+        *ngFor="let day of week"
+        class="text-left text-dark-gray-custom flex gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
+        [ngClass]="[
+          day.color,
+          day.isDisabled ? 'pointer-events-none cursor-not-allowed text-white' : 'hover:brightness-90'
+        ]"
+        (click)="onDayClick(day)"
+      >
+        <div class="font-bold w-12 text-right">
+          {{ day.date | date : 'EEE' | uppercase }}
+        </div>
+        <div class="w-10">{{ day.date | date : 'd' }}</div>
+        <div *ngIf="day.available" class="ml-auto text-xs">{{ day.available }} places</div>
       </div>
     </div>
   </div>
