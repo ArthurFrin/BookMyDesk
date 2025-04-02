@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-orange-custom: #FC8854;
+  --color-dark-gray-custom: #394148;
+  --color-gray-custom: #7F7F7F;
+  --color-light-gray-custom: #F5F5F6;
+  --color-light-gray-custom: #F5F5F6;
+  --color-red-custom: #FC6254;
+  --color-aqua-green-custom: #C2E6E7;
+  --color-yellow-custom: #FBEBBE;
+}
+
+body {
+  font-family: 'Chivo Mono', monospace;
+  color: var(--color-dark-gray-custom);
+}

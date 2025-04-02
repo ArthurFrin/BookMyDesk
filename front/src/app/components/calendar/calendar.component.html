@@ -1,0 +1,14 @@
+<div class="py-16 px-32 ml-[250px]">
+  <div class="bg-gray-800 text-white p-4 mx-4 rounded-t-md flex justify-between">
+    <h2 class="text-lg font-bold">Disponibilités des places</h2>
+    <span>AVRIL - 2025</span>
+  </div>
+  <div class="grid grid-cols-3 gap-8 bg-white p-4 rounded-b-md">
+    <div *ngFor="let week of weeks" class="flex flex-col gap-4">
+      <div *ngFor="let day of week" class="text-left flex gap-2 p-4" [ngClass]="day.color">
+        <div class="font-bold">{{ day.date | date: 'EEE' }}</div>
+        <div>{{ day.date | date: 'd' }}</div>
+      </div>
+    </div>
+  </div>
+</div>

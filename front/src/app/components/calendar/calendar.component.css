@@ -1,0 +1,6 @@
+/* Styles pour le calendrier */
+.bg-gray { background-color: #f3f4f6; color: #000; } /* Couleur par défaut */
+.bg-red { background-color: #f87171; color: white; } /* Rouge pour indisponible */
+.bg-yellow { background-color: #facc15; color: black; } /* Jaune pour disponibilité limitée */
+.bg-teal { background-color: #5eead4; color: black; } /* Vert pour disponible */
+.bg-dark-gray { background-color: #374151; color: white; } /* Gris foncé pour samedi et dimanche */

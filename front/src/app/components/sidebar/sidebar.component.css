@@ -1,0 +1,6 @@
+
+/* Effets de survol pour les liens non actifs */
+
+a.active {
+  background-color: var(--color-aqua-green-custom);
+}
