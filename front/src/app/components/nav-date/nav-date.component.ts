@@ -1,43 +1,55 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AvailabilityService, CalendarDay } from '../../services/availability.service';
-import { Router } from '@angular/router';
+import { AvailabilityService } from '../../services/availability.service';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-calendar',
+  selector: 'app-nav-date',
   standalone: true,
-  templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.css'],
-  imports: [CommonModule]
+  imports: [CommonModule],
+  templateUrl: './nav-date.component.html',
+  styleUrls: ['./nav-date.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class NavDateComponent implements OnInit {
   availabilityService = inject(AvailabilityService);
   currentUserId = inject(AuthService).getCurrentUser()!.id;
   router = inject(Router);
+  activatedRoute = inject(ActivatedRoute);
 
-  // Access the service's signal directly
   weeks = this.availabilityService.calendarData;
   currentMonth = '';
   currentYear = 0;
+  selectedDate: string | null = null;
 
-  // Check if a day is in the past
-  isDayPassed(date: Date): boolean {
+  isDayPassed(day: Date): boolean {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return date < today;
+    return day < today;
+  }
+
+  // Get formatted selected date in the format "Lundi 6 mars 2025"
+  get getFormattedSelectedDate(): string {
+    if (this.selectedDate) {
+      const date = new Date(this.selectedDate);
+      const options: Intl.DateTimeFormatOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+      return date.toLocaleDateString('fr-FR', options);
+    }
+    return '';
   }
 
   ngOnInit(): void {
-    // Check if the data is already loaded
+    // Get the date from the URL
+    this.activatedRoute.paramMap.subscribe(params => {
+      this.selectedDate = params.get('date');
+    });
+
     if (this.weeks().length === 0) {
-      // Load the data if it's not available
       this.availabilityService.getCalendarData(this.currentUserId).subscribe({
         next: () => {
           this.updateDateDisplay();
         },
         error: (error) => {
-          console.error('Error while loading the calendar:', error);
+          console.error('Error loading navigation dates:', error);
         }
       });
     } else {
@@ -66,12 +78,8 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  onDayClick(day: { date: Date; isDisabled: boolean }): void {
-    if (day.isDisabled) return;
-  }
-
   navigateToDayAvailability(day: any): void {
-    if (day.isDisabled || this.isDayPassed(day.date)) return;
+    if (day.isDisabled) return;
 
     const formattedDate = day.date.toISOString().split('T')[0]; // Format YYYY-MM-DD
     this.router.navigate([`/disponibilite/${formattedDate}`]);

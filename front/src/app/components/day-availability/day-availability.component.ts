@@ -22,7 +22,7 @@ export class DayAvailabilityComponent implements OnInit {
   currentUser = inject(AuthService).getCurrentUser();
 
   desks = signal<Desk[]>([]);
-  currentReservedDesk: Desk | null = null; // Variable pour suivre le bureau actuellement réservé
+  currentReservedDesk: Desk | null = null; // Variable to track the currently reserved desk
 
   selectedDate: string | null = null;
 
@@ -39,12 +39,12 @@ export class DayAvailabilityComponent implements OnInit {
         this.availabilityService.getAvailableDesksForDay(this.selectedDate, this.currentUser!.id).subscribe({
           next: (data) => {
             this.desks.set(data.desks);
-            // Identifier si l'utilisateur a déjà un bureau réservé
+            // Identify if the user already has a reserved desk
             this.currentReservedDesk = data.desks.find(desk =>
               desk.status === 'user-reserved') || null;
           },
           error: (error) => {
-            console.error('Erreur lors du chargement des disponibilités:', error);
+            console.error('Error loading availability:', error);
             this.router.navigate(['/']);
           }
         });
@@ -58,26 +58,26 @@ export class DayAvailabilityComponent implements OnInit {
     }
 
     if (desk.status === 'available') {
-      // Vérifier si l'utilisateur a déjà un bureau réservé
+      // Check if the user already has a reserved desk
       const previousReservedDesk = this.currentReservedDesk;
 
       if (previousReservedDesk) {
-        // Annuler la réservation précédente avant d'en faire une nouvelle
+        // Cancel the previous reservation before making a new one
         this.availabilityService.unfollowDesk(previousReservedDesk.id, this.currentUser!.id, this.selectedDate!).subscribe({
           next: () => {
             previousReservedDesk.status = 'available';
             previousReservedDesk.userId = undefined;
-            previousReservedDesk.userName = undefined; // Réinitialiser le nom de l'utilisateur
+            previousReservedDesk.userName = undefined; // Reset the user's name
 
-            // Puis réserver le nouveau bureau
+            // Then reserve the new desk
             this.reserveNewDesk(desk);
           },
           error: (error: any) => {
-            console.error('Erreur lors de l\'annulation de la réservation précédente:', error);
+            console.error('Error canceling the previous reservation:', error);
           }
         });
       } else {
-        // Aucun bureau réservé, procéder directement à la réservation
+        // No reserved desk, proceed directly to reservation
         this.reserveNewDesk(desk);
       }
     } else if (desk.status === 'user-reserved') {
@@ -85,11 +85,11 @@ export class DayAvailabilityComponent implements OnInit {
         next: () => {
           desk.status = 'available';
           desk.userId = undefined;
-          desk.userName = undefined; // Réinitialiser le nom de l'utilisateur
-          this.currentReservedDesk = null; // Mettre à jour le suivi du bureau réservé
+          desk.userName = undefined; // Reset the user's name
+          this.currentReservedDesk = null; // Update the reserved desk tracking
         },
         error: (error: any) => {
-          console.error('Erreur lors de l\'annulation de la réservation du bureau:', error);
+          console.error('Error canceling the desk reservation:', error);
         }
       });
     }
@@ -100,11 +100,11 @@ export class DayAvailabilityComponent implements OnInit {
       next: () => {
         desk.status = 'user-reserved';
         desk.userId = this.currentUser!.id;
-        desk.userName = `${this.currentUser!.firstName} ${this.currentUser!.lastName}`; // Ajouter le nom de l'utilisateur
-        this.currentReservedDesk = desk; // Mettre à jour le bureau actuellement réservé
+        desk.userName = `${this.currentUser!.firstName} ${this.currentUser!.lastName}`; // Add the user's name
+        this.currentReservedDesk = desk; // Update the currently reserved desk
       },
       error: (error: any) => {
-        console.error('Erreur lors de la réservation du bureau:', error);
+        console.error('Error reserving the desk:', error);
       }
     });
   }

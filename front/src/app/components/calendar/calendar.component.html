@@ -5,14 +5,15 @@
   </div>
 
   <div class="grid grid-cols-3 gap-8 bg-white p-4 rounded-b-md">
-    <div *ngFor="let week of weeks" class="flex flex-col gap-4">
+    <div *ngFor="let week of weeks()" class="flex flex-col gap-4">
       <div
         *ngFor="let day of week"
         class="text-left text-dark-gray-custom flex gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
         [ngClass]="[
           day.color,
           day.userHasReservation ? 'bg-green-custom' : '',
-          day.isDisabled ? 'pointer-events-none cursor-not-allowed text-white' : 'hover:brightness-90'
+          day.isDisabled ? 'pointer-events-none cursor-not-allowed text-white' : 'hover:brightness-90',
+          isDayPassed(day.date) ? 'text-gray-500 pointer-events-none cursor-not-allowed' : '',
         ]"
         (click)="navigateToDayAvailability(day)"
       >

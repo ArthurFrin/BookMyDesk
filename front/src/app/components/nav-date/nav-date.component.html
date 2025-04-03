@@ -1,0 +1,28 @@
+<div class="text-xl font-semibold my-4 pl-8" *ngIf="currentMonth">
+  {{ getFormattedSelectedDate | titlecase }}
+</div>
+<nav class="flex flex-col gap-4 items-center">
+
+  <div class="flex gap-2 bg-dark-gray-custom p-2 rounded-full">
+    <ng-container *ngFor="let week of weeks()">
+      <div class="flex gap-2">
+        <ng-container *ngFor="let day of week">
+          <div
+            *ngIf="!day.isDisabled && !isDayPassed(day.date)"
+            class="bg-light-gray-custom w-12 h-12 flex items-center justify-center rounded-full"
+            [ngClass]="[
+              'day-nav',
+              day.color,
+              day.userHasReservation ? 'bg-green-custom!' : '',
+              'cursor-pointer'
+            ]"
+            (click)="navigateToDayAvailability(day)"
+            [attr.title]="(day.date | date:'EEEE d MMMM') + ' - ' + (day.available !== undefined ? day.available + ' places disponibles' : 'Fermé')"
+          >
+            {{ day.date | date:'d' }}
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</nav>

@@ -59,7 +59,7 @@ export async function getAvailability(
         let userHasReservation = false;
 
         if (!isDisabled) {
-          // Récupérer toutes les réservations pour cette date
+          // Retrieve all reservations for this date
           const reservations = await prisma.reservation.findMany({
             where: {
               date: {
@@ -73,7 +73,7 @@ export async function getAvailability(
           
           reservedCount = reservations.length;
           
-          // Vérifier si l'utilisateur a déjà une réservation pour cette date
+          // Check if the user already has a reservation for this date
           if (userId) {
             userHasReservation = reservations.some(
               res => res.userId === parseInt(userId)
@@ -141,10 +141,10 @@ export async function getAvailableDesksForDay(
     });
   }
 
-  // Récupérer tous les bureaux (pas seulement ceux qui sont disponibles)
+  // Retrieve all desks (not just the available ones)
   const desks = await prisma.desk.findMany();
 
-  // Récupérer toutes les réservations pour la date spécifiée
+  // Retrieve all reservations for the specified date
   const reservations = await prisma.reservation.findMany({
     where: {
       date: {
@@ -160,57 +160,57 @@ export async function getAvailableDesksForDay(
     },
   });
 
-  // Vérifier si l'utilisateur spécifié a déjà une réservation pour ce jour
+  // Check if the specified user already has a reservation for this day
   const userReservation = userId 
     ? reservations.find(res => res.userId === parseInt(userId)) 
     : null;
 
-  // Récupérer les IDs des bureaux réservés avec l'information de l'utilisateur
+  // Retrieve the IDs of reserved desks with user information
   const reservedDesksInfo = reservations.map(res => ({
     deskId: res.deskId,
     userId: res.userId,
     userName: res.user.firstName + ' ' + res.user.lastName,
   }));
 
-  // Préparer la liste des bureaux avec leur statut
+  // Prepare the list of desks with their status
   const desksWithStatus = desks.map(desk => {
     if (!desk.isAvailable) {
       return {
         id: desk.id,
-        status: 'disabled',  // Bureau cassé ou non disponible
+        status: 'disabled',  // Desk is broken or unavailable
       };
     }
     
     const reservation = reservedDesksInfo.find(res => res.deskId === desk.id);
     
-    // Si réservé par l'utilisateur actuel, status spécial
+    // If reserved by the current user, special status
     if (userId && reservation?.userId === parseInt(userId)) {
       return {
         id: desk.id,
-        status: 'user-reserved',  // Réservé par l'utilisateur actuel
+        status: 'user-reserved',  // Reserved by the current user
         userId: reservation.userId,
         userName: reservation.userName
       };
     }
     
-    // Si réservé par quelqu'un d'autre
+    // If reserved by someone else
     if (reservation) {
       return {
         id: desk.id,
-        status: 'reserved',  // Réservé par quelqu'un d'autre
+        status: 'reserved',  // Reserved by someone else
         userId: reservation.userId,
         userName: reservation.userName
       };
     }
     
-    // Sinon, disponible
+    // Otherwise, available
     return {
       id: desk.id,
-      status: 'available',  // Disponible pour réservation
+      status: 'available',  // Available for reservation
     };
   });
 
-  // Compter uniquement les bureaux disponibles (ni réservés ni désactivés)
+  // Count only the available desks (neither reserved nor disabled)
   const availableDesksCount = desksWithStatus.filter(desk => desk.status === 'available').length;
 
   return reply.send({
