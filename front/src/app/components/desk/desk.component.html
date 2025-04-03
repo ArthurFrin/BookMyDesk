@@ -1,0 +1,15 @@
+<button
+  class="w-40 h-20"
+  [ngClass]="{
+    'bg-light-gray-custom': desk.status === 'available',
+    'bg-red-custom': desk.status === 'reserved',
+    'bg-gray-custom': desk.status === 'disabled',
+    'bg-green-custom': desk.status === 'user-reserved',
+    'cursor-pointer': desk.status === 'user-reserved' || desk.status === 'available'}"
+>
+  @if (desk.userName) {
+  {{ desk.userName }}
+  } @else {
+  {{ desk.id }}
+  }
+</button>

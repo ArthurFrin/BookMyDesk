@@ -7,6 +7,7 @@
   --color-gray-custom: #7F7F7F;
   --color-light-gray-custom: #F5F5F6;
   --color-light-gray-custom: #F5F5F6;
+  --color-green-custom: #97F9BC;
   --color-red-custom: #FC6254;
   --color-aqua-green-custom: #C2E6E7;
   --color-yellow-custom: #FBEBBE;
@@ -15,4 +16,5 @@
 body {
   font-family: 'Chivo Mono', monospace;
   color: var(--color-dark-gray-custom);
+  margin-left: 250px; /* Adjust this value to match the width of your sidebar */
 }

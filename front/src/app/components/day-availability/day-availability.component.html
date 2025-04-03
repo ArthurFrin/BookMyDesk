@@ -1,0 +1,43 @@
+<div class="flex w-full justify-between p-16 max-w-5xl m-auto">
+  <div class="left flex flex-col gap-16">
+    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-86">
+      @for (desk of desks(); track desk.id) {
+        @if (desk.id >= 1 && desk.id <= 4) {
+          <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
+        }
+      }
+    </div>
+    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-128">
+      @for (desk of desks(); track desk.id) {
+        @if (desk.id >= 5 && desk.id <= 10) {
+          <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
+        }
+      }
+    </div>
+    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-128">
+      @for (desk of desks(); track desk.id) {
+        @if (desk.id >= 11 && desk.id <= 16) {
+          <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
+        }
+      }
+    </div>
+  </div>
+  <div class="flex flex-col gap-16 mt-62">
+    <div class="bg-dark-gray-custom flex flex-col gap-2 p-2">
+      @for (desk of desks(); track desk.id) {
+        @if (desk.id >= 17 && desk.id <= 18) {
+          <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
+        }
+      }
+    </div>
+    <div class="bg-dark-gray-custom flex flex-col gap-2 p-2">
+      @for (desk of desks(); track desk.id) {
+        @if (desk.id >= 19 && desk.id <= 20) {
+          <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
+        }
+      }
+    </div>
+  </div>
+</div>
+
+

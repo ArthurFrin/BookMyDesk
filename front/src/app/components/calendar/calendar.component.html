@@ -1,4 +1,4 @@
-<div class="py-16 px-32 ml-[250px]">
+<div class="py-16 px-32">
   <div class="bg-gray-800 text-white p-4 mx-4 rounded-t-md flex justify-between items-center">
     <h2 class="text-lg font-bold">Disponibilités des places</h2>
     <span>{{ currentMonth | uppercase }} - {{ currentYear }}</span>
@@ -11,9 +11,10 @@
         class="text-left text-dark-gray-custom flex gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
         [ngClass]="[
           day.color,
+          day.userHasReservation ? 'bg-green-custom' : '',
           day.isDisabled ? 'pointer-events-none cursor-not-allowed text-white' : 'hover:brightness-90'
         ]"
-        (click)="onDayClick(day)"
+        (click)="navigateToDayAvailability(day)"
       >
         <div class="font-bold w-12 text-right">
           {{ day.date | date : 'EEE' | uppercase }}

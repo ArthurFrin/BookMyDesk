@@ -17,12 +17,14 @@ export class AppComponent {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      let route = this.activatedRoute;
-      while (route.firstChild) {
-        route = route.firstChild;
+    ).subscribe({
+      next: () => {
+        let route = this.activatedRoute;
+        while (route.firstChild) {
+          route = route.firstChild;
+        }
+        this.showSidebar = !route.snapshot.data['hideSidebar'];
       }
-      this.showSidebar = !route.snapshot.data['hideSidebar'];
     });
   }
 }
