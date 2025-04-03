@@ -14,7 +14,7 @@ export class AvailabilityService extends ApiService {
   }
 
   getAvailableDesksForDay(date: string, userId: number): Observable<DayAvailabilityResponse> {
-    return this.get<DayAvailabilityResponse>(`availability/${date}?userId=${userId}`);
+    return this.get<DayAvailabilityResponse>(`availability/day/${date}?userId=${userId}`);
   }
 
   unfollowDesk(deskId: number, userId: number, date: string): Observable<any> {
