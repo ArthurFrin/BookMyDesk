@@ -3,7 +3,8 @@ import fastify from 'fastify';
 import cors from '@fastify/cors';
 import userRoutes from './src/routes/articleRoutes';
 import prismaPlugin from './src/plugins/prismaPlugin';
-import availabilityRoutes from './src/routes/availability.route'
+import availabilityRoutes from './src/routes/availability.route';
+import deskRoutes from './src/routes/desk.route';
 
 const app = fastify();
 // Enregistrer le plugin CORS
@@ -15,6 +16,7 @@ app.register(prismaPlugin);
 
 // Register routes
 app.register(availabilityRoutes, { prefix: '/api' })
+app.register(deskRoutes, { prefix: '/api' })
 
 // Health check endpoint
 app.get('/ping', async (request, reply) => {
