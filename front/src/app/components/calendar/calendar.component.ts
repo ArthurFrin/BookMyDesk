@@ -31,7 +31,6 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     this.availabilityService.getAvailability(this.currentUserId).subscribe({
       next: (data: AvailabilityWeek[]) => {
-        console.log('Calendrier:', data);
         this.weeks = data.map((week) =>
           week.days.map((day) => {
             const dateObj = new Date(day.date);
@@ -78,9 +77,6 @@ export class CalendarComponent implements OnInit {
 
   onDayClick(day: { date: Date; isDisabled: boolean }): void {
     if (day.isDisabled) return;
-
-    // ici tu peux ouvrir une modale ou appeler une méthode pour réserver
-    console.log('Date sélectionnée pour réservation :', day.date.toISOString());
   }
 
   navigateToDayAvailability(day: any): void {

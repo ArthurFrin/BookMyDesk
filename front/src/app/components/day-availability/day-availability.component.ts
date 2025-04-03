@@ -42,7 +42,6 @@ export class DayAvailabilityComponent implements OnInit {
             // Identifier si l'utilisateur a déjà un bureau réservé
             this.currentReservedDesk = data.desks.find(desk =>
               desk.status === 'user-reserved') || null;
-            console.log('Bureaux disponibles:', data);
           },
           error: (error) => {
             console.error('Erreur lors du chargement des disponibilités:', error);
