@@ -9,8 +9,8 @@ async function main() {
   // 1. Utilisateurs
   const users = await prisma.user.createMany({
     data: [
-      { firstName: 'Alice', lastName: 'Dupont', photoUrl: 'https://picsum.photos/seed/alice/100' },
-      { firstName: 'Bob', lastName: 'Martin', photoUrl: 'https://picsum.photos/seed/bob/100' }
+      { email:'alice.dupond@extia.fr', password:'sduhfsdighf', firstName: 'Alice', lastName: 'Dupont', photoUrl: 'https://picsum.photos/seed/alice/100' },
+      { email:'bob.martin@extia.fr', password:'dbjbqsdq', firstName: 'Bob', lastName: 'Martin', photoUrl: 'https://picsum.photos/seed/bob/100' }
     ]
   })
 
