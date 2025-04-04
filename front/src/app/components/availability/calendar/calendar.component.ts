@@ -13,8 +13,10 @@ import { AuthService } from '../../../services/auth.service';
 })
 export class CalendarComponent implements OnInit {
   availabilityService = inject(AvailabilityService);
-  currentUserId = inject(AuthService).getCurrentUser()!.id;
   router = inject(Router);
+  authService = inject(AuthService);
+
+  currentUser = this.authService.currentUser;
 
   // Access the service's signal directly
   weeks = this.availabilityService.calendarData;
@@ -29,10 +31,16 @@ export class CalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.currentUser()) {
+      console.error('No user is currently logged in. Redirecting to login page.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
     // Check if the data is already loaded
     if (this.weeks().length === 0) {
       // Load the data if it's not available
-      this.availabilityService.getCalendarData(this.currentUserId).subscribe({
+      this.availabilityService.getCalendarData(this.currentUser()!.id).subscribe({
         next: () => {
           this.updateDateDisplay();
         },

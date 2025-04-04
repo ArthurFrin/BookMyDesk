@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { computed, Injectable, signal } from '@angular/core';
 import { User } from '../interfaces/user';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ApiService } from './api.service';
+import { tap, map, catchError } from 'rxjs/operators';
+import { HttpHeaders } from '@angular/common/http';
 
 export interface LoginResponse {
   token: string;
@@ -14,21 +16,20 @@ export interface LoginResponse {
 
 export class AuthService extends ApiService {
 
-  currentUser: User | null = {
-    id: 2,
-    firstName: 'Bob',
-    lastName: 'Martin',
-    photoUrl: 'https://api.dicebear.com/9.x/thumbs/svg?seed=user',
-    isAdmin: false
-  };
+  private currentUserSignal = signal<User | null>(null);
+
+  currentUser = computed(() => this.currentUserSignal());
 
   login(email: string, password: string): Observable<LoginResponse> {
-    const res =this.post<LoginResponse>('auth/login', { email, password });
+    const res = this.post<LoginResponse>('auth/login', { email, password }).pipe(
+      tap((response: LoginResponse) => {
+        if (response && response.token) {
+          sessionStorage.setItem('authToken', response.token);
+          this.currentUserSignal.set(response.user);
+        }
+      })
+    );
     res.subscribe({
-      next: (response) => {
-        this.currentUser = response.user;
-        localStorage.setItem('token', response.token);
-      },
       error: (error) => {
         console.error('Login error:', error);
       }
@@ -36,11 +37,43 @@ export class AuthService extends ApiService {
     return res;
   }
 
-  getCurrentUser(): User | null {
-    return this.currentUser;
+  logout(): void {
+    sessionStorage.removeItem('authToken');
+    this.currentUserSignal.set(null);
   }
 
-  isAdmin(): boolean {
-    return this.currentUser?.isAdmin === true;
+  getCurrentUser(): User | null {
+    return this.currentUserSignal();
   }
+
+  updateProfile(user: User): Observable<any> {
+    return this.put('/auth/profile', user);
+  }
+
+  verifyToken(): Observable<boolean> {
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      return of(false);
+    }
+
+    const headers: HttpHeaders = new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
+
+    return this.get<{ valid: boolean; user: User }>('auth/verify', headers).pipe(
+      map((response) => {
+        if (response.valid) {
+          this.currentUserSignal.set(response.user);
+          return true;
+        }
+        return false;
+      }),
+      catchError((error) => {
+        console.error('Token verification error:', error);
+        this.logout();
+        return of(false);
+      })
+    );
+  }
+
 }

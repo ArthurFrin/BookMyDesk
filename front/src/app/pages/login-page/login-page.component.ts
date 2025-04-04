@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-page',
@@ -16,11 +17,12 @@ export class LoginPageComponent {
   errorMessage: string = '';
 
   authService = inject(AuthService);
+  router = inject(Router);
 
   login() {
     this.authService.login(this.email, this.password).subscribe({
       next: (response) => {
-        console.log('Login successful', response);
+        this.router.navigate(['/disponibilite']);
       },
       error: (error) => {
         this.errorMessage = 'Échec de la connexion. Veuillez vérifier vos identifiants.';

@@ -1,0 +1,26 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-md">
+    <h2 class="text-2xl font-bold text-center text-gray-800">Edit Profile</h2>
+    <form (ngSubmit)="updateProfile()" class="space-y-4">
+      <div>
+        <label for="firstName" class="block text-sm font-medium text-gray-700">First Name</label>
+        <input [(ngModel)]="user.firstName" name="firstName" id="firstName" type="text" required
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+      </div>
+      <div>
+        <label for="lastName" class="block text-sm font-medium text-gray-700">Last Name</label>
+        <input [(ngModel)]="user.lastName" name="lastName" id="lastName" type="text" required
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+      </div>
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input [(ngModel)]="user.email" name="email" id="email" type="email" required
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
+      </div>
+      <button type="submit"
+        class="w-full px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
+        Save Changes
+      </button>
+    </form>
+  </div>
+</div>

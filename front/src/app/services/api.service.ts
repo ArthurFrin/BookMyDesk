@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -10,13 +10,20 @@ export abstract class ApiService {
 
   constructor(protected http: HttpClient) {}
 
-  protected get<T>(path: string): Observable<T> {
-    return this.http.get<T>(`${this.baseUrl}/${path}`);
+  protected get<T>(path: string, headers?: HttpHeaders): Observable<T> {
+    return this.http.get<T>(`${this.baseUrl}/${path}`, { headers });
   }
 
-  protected post<T>(path: string, body: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${path}`, body);
+  protected post<T>(path: string, body: any, headers?: HttpHeaders): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}/${path}`, body, { headers });
   }
 
+  protected put<T>(path: string, body: any, headers?: HttpHeaders): Observable<T> {
+    return this.http.put<T>(`${this.baseUrl}/${path}`, body, { headers });
+  }
+
+  protected delete<T>(path: string, headers?: HttpHeaders): Observable<T> {
+    return this.http.delete<T>(`${this.baseUrl}/${path}`, { headers });
+  }
 }
 

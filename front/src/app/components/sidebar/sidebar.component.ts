@@ -1,32 +1,33 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, effect } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule, CalendarCheckIcon, LogOutIcon, UserRoundPen } from 'lucide-angular';
-import { User } from '../../interfaces/user';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  standalone: true,
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css'],
-  standalone: true
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule],
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
   CalendarCheckIcon = CalendarCheckIcon;
   LogOutIcon = LogOutIcon;
   UserRoundPen = UserRoundPen;
 
-  service = inject(AuthService);
+  auth = inject(AuthService);
+  user = this.auth.currentUser;
 
-  currentUser = signal<User | null>(null);
-
-  ngOnInit(): void {
-    document.body.style.marginLeft = '250px'; // Set the body margin to create space for the sidebar
-    this.currentUser.set(this.service.getCurrentUser());
+  constructor() {
+    document.body.style.marginLeft = '250px';
   }
 
   ngOnDestroy(): void {
-    // Reset the body margin when sidebar is destroyed
     document.body.style.marginLeft = '0';
+  }
+
+  logout() {
+    this.auth.logout();
+    window.location.href = '/login';
   }
 }

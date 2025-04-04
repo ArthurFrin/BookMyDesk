@@ -126,9 +126,28 @@ export const getProfile = async (request: FastifyRequest, reply: FastifyReply) =
 // --- VERIFY TOKEN ---
 export const verifyToken = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
-    return reply.send({ valid: true, user: request.user })
+    const { id } = request.user;
+    const prisma = request.server.prisma;
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        photoUrl: true,
+        isAdmin: true
+      }
+    });
+
+    if (!user) {
+      return reply.status(404).send({ error: 'Utilisateur non trouvé' });
+    }
+
+    return reply.send({ valid: true, user });
   } catch (error) {
-    request.log.error(error)
-    return reply.status(500).send({ error: 'Erreur lors de la vérification du token' })
+    request.log.error(error);
+    return reply.status(500).send({ error: 'Erreur lors de la vérification du token' });
   }
-}
+};
