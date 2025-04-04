@@ -1,0 +1,33 @@
+meta {
+  name: Get Profile
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{host}}/auth/profile
+  body: none
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Récupération du profil
+  
+  Cette requête récupère le profil de l'utilisateur actuellement connecté.
+  
+  ## Authentification
+  
+  Requiert un token JWT valide obtenu via login ou register.
+  
+  ## Réponse attendue
+  
+  L'API retourne les informations du profil de l'utilisateur authentifié.
+}

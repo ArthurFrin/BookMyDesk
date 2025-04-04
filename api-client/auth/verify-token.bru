@@ -1,0 +1,33 @@
+meta {
+  name: Verify Token
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{host}}/auth/verify
+  body: none
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Vérification du token
+  
+  Cette requête permet de vérifier si un token JWT est toujours valide.
+  
+  ## Authentification
+  
+  Requiert un token JWT.
+  
+  ## Réponse attendue
+  
+  En cas de succès, l'API retourne un objet confirmant la validité du token.
+}

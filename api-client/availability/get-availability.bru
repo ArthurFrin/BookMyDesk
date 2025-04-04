@@ -1,0 +1,33 @@
+meta {
+  name: Get Availability
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3000/api/availability?userId=2
+  body: none
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Obtenir les disponibilités
+  
+  Cette requête permet de récupérer la disponibilité des bureaux sur une période de 3 semaines.
+  
+  ## Paramètres de requête
+  
+  - `userId` : ID de l'utilisateur pour vérifier ses réservations existantes (optionnel)
+  
+  ## Réponse attendue
+  
+  La réponse contient un tableau de semaines, chacune avec 7 jours et leurs disponibilités respectives.
+}

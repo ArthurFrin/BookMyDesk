@@ -1,0 +1,45 @@
+meta {
+  name: Reserve Desk
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/desks/5/reserve
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userId": 2,
+    "date": "2025-04-10"
+  }
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Réserver un bureau
+  
+  Cette requête permet à un utilisateur de réserver un bureau pour une date spécifique.
+  
+  ## Paramètres de chemin
+  
+  - `deskId` : ID du bureau à réserver
+  
+  ## Corps de la requête
+  
+  - `userId` : ID de l'utilisateur qui fait la réservation
+  - `date` : Date de réservation au format YYYY-MM-DD
+  
+  ## Réponse attendue
+  
+  En cas de succès, l'API confirme la réservation avec les détails.
+}

@@ -1,0 +1,41 @@
+meta {
+  name: Get Day Availability
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/api/availability/day/2025-04-10?userId=2
+  body: none
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Obtenir les disponibilités pour un jour spécifique
+  
+  Cette requête permet de récupérer la disponibilité détaillée des bureaux pour une date précise.
+  
+  ## Paramètres de requête
+  
+  - `userId` : ID de l'utilisateur pour vérifier ses réservations existantes (optionnel)
+  
+  ## Paramètres de chemin
+  
+  - `date` : Date au format YYYY-MM-DD
+  
+  ## Réponse attendue
+  
+  La réponse contient des informations détaillées sur la disponibilité pour le jour spécifié :
+  - Date
+  - Si le jour est désactivé (weekend ou jour férié)
+  - Nombre de bureaux disponibles
+  - Liste détaillée des bureaux avec leur statut
+}

@@ -1,0 +1,45 @@
+meta {
+  name: Unfollow Desk
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/api/desks/5/unfollow
+  body: json
+  auth: bearer
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "userId": 2,
+    "date": "2025-04-10"
+  }
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+docs {
+  # Annuler une réservation de bureau
+  
+  Cette requête permet à un utilisateur d'annuler une réservation de bureau pour une date spécifique.
+  
+  ## Paramètres de chemin
+  
+  - `deskId` : ID du bureau dont on veut annuler la réservation
+  
+  ## Corps de la requête
+  
+  - `userId` : ID de l'utilisateur qui annule la réservation
+  - `date` : Date de la réservation à annuler au format YYYY-MM-DD
+  
+  ## Réponse attendue
+  
+  En cas de succès, l'API confirme l'annulation de la réservation.
+}

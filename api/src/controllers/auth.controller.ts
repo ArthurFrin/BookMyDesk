@@ -27,11 +27,16 @@ export const register = async (request: FastifyRequest, reply: FastifyReply) => 
         password: hashedPassword,
         firstName,
         lastName,
-        photoUrl: photoUrl ?? ''
+        photoUrl: photoUrl ?? '',
+        isAdmin: false // Par défaut, les nouveaux utilisateurs ne sont pas admin
       }
     })
 
-    const token = await reply.jwtSign({ id: newUser.id, email: newUser.email })
+    const token = await reply.jwtSign({ 
+      id: newUser.id, 
+      email: newUser.email,
+      isAdmin: newUser.isAdmin
+    })
 
     return reply.status(201).send({
       user: {
@@ -39,7 +44,8 @@ export const register = async (request: FastifyRequest, reply: FastifyReply) => 
         email: newUser.email,
         firstName: newUser.firstName,
         lastName: newUser.lastName,
-        photoUrl: newUser.photoUrl
+        photoUrl: newUser.photoUrl,
+        isAdmin: newUser.isAdmin
       },
       token
     })
@@ -65,7 +71,11 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
       return reply.status(401).send({ error: 'Email ou mot de passe incorrect' })
     }
 
-    const token = await reply.jwtSign({ id: user.id, email: user.email })
+    const token = await reply.jwtSign({ 
+      id: user.id, 
+      email: user.email,
+      isAdmin: user.isAdmin
+    })
 
     return reply.send({
       user: {
@@ -73,7 +83,8 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        photoUrl: user.photoUrl
+        photoUrl: user.photoUrl,
+        isAdmin: user.isAdmin
       },
       token
     })
@@ -96,7 +107,8 @@ export const getProfile = async (request: FastifyRequest, reply: FastifyReply) =
         email: true,
         firstName: true,
         lastName: true,
-        photoUrl: true
+        photoUrl: true,
+        isAdmin: true
       }
     })
 

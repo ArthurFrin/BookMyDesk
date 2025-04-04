@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "meet-at-the-office",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
