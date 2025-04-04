@@ -24,7 +24,11 @@ export class NavDateComponent implements OnInit {
 
   isDayPassed(day: Date): boolean {
     const today = new Date();
-    return day < today;
+    today.setHours(0, 0, 0, 0);
+    const dayToCheck = new Date(day);
+    dayToCheck.setHours(0, 0, 0, 0);
+
+    return dayToCheck < today;
   }
 
   // Get formatted selected date in the format "Lundi 6 mars 2025"

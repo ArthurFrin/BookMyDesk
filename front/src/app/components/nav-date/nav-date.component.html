@@ -14,6 +14,7 @@
               'day-nav',
               day.color,
               day.userHasReservation ? 'bg-green-custom!' : '',
+              selectedDate === (day.date | date:'yyyy-MM-dd') ? 'border-2 border-blue-400' : '',
               'cursor-pointer'
             ]"
             (click)="navigateToDayAvailability(day)"
