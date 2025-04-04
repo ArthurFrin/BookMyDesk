@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AvailabilityService } from '../../services/availability.service';
+import { AvailabilityService } from '../../../services/availability.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-nav-date',

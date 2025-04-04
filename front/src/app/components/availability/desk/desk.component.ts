@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { Desk } from '../../interfaces/desk';
-import { AvailabilityService } from '../../services/availability.service';
+import { Desk } from '../../../interfaces/desk';
+import { AvailabilityService } from '../../../services/availability.service';
 
 @Component({
   selector: 'app-desk',

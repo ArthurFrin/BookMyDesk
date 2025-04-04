@@ -16,5 +16,4 @@
 body {
   font-family: 'Chivo Mono', monospace;
   color: var(--color-dark-gray-custom);
-  margin-left: 250px; /* Adjust this value to match the width of your sidebar */
 }

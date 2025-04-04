@@ -1,10 +1,10 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { AvailabilityService } from '../../services/availability.service';
+import { AvailabilityService } from '../../../services/availability.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DeskComponent } from '../desk/desk.component';
-import { Desk } from '../../interfaces/desk';
-import { AuthService } from '../../services/auth.service';
+import { Desk } from '../../../interfaces/desk';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-day-availability',

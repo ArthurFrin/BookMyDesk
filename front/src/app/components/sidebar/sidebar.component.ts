@@ -21,6 +21,12 @@ export class SidebarComponent implements OnInit {
   currentUser = signal<User | null>(null);
 
   ngOnInit(): void {
+    document.body.style.marginLeft = '250px'; // Set the body margin to create space for the sidebar
     this.currentUser.set(this.service.getCurrentUser());
+  }
+
+  ngOnDestroy(): void {
+    // Reset the body margin when sidebar is destroyed
+    document.body.style.marginLeft = '0';
   }
 }

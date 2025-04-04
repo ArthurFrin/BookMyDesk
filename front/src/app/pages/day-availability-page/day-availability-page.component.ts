@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { DayAvailabilityComponent } from '../../components/day-availability/day-availability.component';
-import { NavDateComponent } from '../../components/nav-date/nav-date.component';
+import { DayAvailabilityComponent } from '../../components/availability/day-availability/day-availability.component';
+import { NavDateComponent } from '../../components/availability/nav-date/nav-date.component';
 
 @Component({
   selector: 'app-day-availability-page',
