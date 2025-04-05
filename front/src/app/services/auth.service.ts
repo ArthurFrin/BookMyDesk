@@ -46,21 +46,32 @@ export class AuthService extends ApiService {
     return this.currentUserSignal();
   }
 
-  updateProfile(user: User): Observable<any> {
-    return this.put('/auth/profile', user);
+  updateProfile(user: User): Observable<User> {
+    const res = this.put('auth/profile', user, this.getHeaderAuth());
+    res.subscribe({
+      next: (response) => {
+        this.currentUserSignal.set(response as User);
+      },
+      error: (error) => {
+        console.error('Error updating profile:', error);
+      }
+    });
+    return res as Observable<User>;
+  }
+
+  getHeaderAuth(): HttpHeaders {
+    const token = sessionStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('Token not found');
+    }
+    return new HttpHeaders({
+      Authorization: `Bearer ${token}`
+    });
   }
 
   verifyToken(): Observable<boolean> {
-    const token = sessionStorage.getItem('authToken');
-    if (!token) {
-      return of(false);
-    }
 
-    const headers: HttpHeaders = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    return this.get<{ valid: boolean; user: User }>('auth/verify', headers).pipe(
+    return this.get<{ valid: boolean; user: User }>('auth/verify', this.getHeaderAuth()).pipe(
       map((response) => {
         if (response.valid) {
           this.currentUserSignal.set(response.user);
@@ -75,5 +86,18 @@ export class AuthService extends ApiService {
       })
     );
   }
+
+  setPassword(token: string, password: string): Observable<{ message: string }> {
+    return this.post<{ message: string }>('auth/create-password', { token, password }).pipe(
+      tap(() => {
+        // Tu peux déclencher un toast ou log ici si nécessaire
+      }),
+      catchError(error => {
+        console.error('Erreur lors de la création du mot de passe', error);
+        throw error;
+      })
+    );
+  }
+
 
 }

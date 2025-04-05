@@ -20,6 +20,13 @@ services:
       ADMINER_DESIGN: dracula
     ports:
       - "8080:8080"
+  
+  mailhog:
+    image: mailhog/mailhog
+    container_name: mailhog
+    ports:
+      - "1025:1025"   # Port SMTP (pour ton app)
+      - "8025:8025"   # Interface web (accès via navigateur)
 
 volumes:
   db_data:

@@ -1,13 +1,41 @@
-# Front
+# Frontend meet at the office
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 
+## Prerequisites
+
+Before running the application, ensure you have Node.js and npm installed.
+
+## Installation
+
+To install the necessary dependencies, run:
+
+```bash
+npm install
+```
+
+## Configuration
+
+Before running the application, copy the example environment file:
+
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+```
+
+Modify the `src/environments/environment.ts` file with your specific configuration.
+
 ## Development server
 
-To start a local development server, run:
+To start a local development server, you can use either Angular CLI or npm:
 
 ```bash
 ng serve
+```
+
+or
+
+```bash
+npm run start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.

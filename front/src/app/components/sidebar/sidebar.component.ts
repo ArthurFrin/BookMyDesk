@@ -1,7 +1,8 @@
 import { Component, inject, effect } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule, CalendarCheckIcon, LogOutIcon, UserRoundPen } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,7 +17,9 @@ export class SidebarComponent {
   UserRoundPen = UserRoundPen;
 
   auth = inject(AuthService);
+  toast = inject(ToastService);
   user = this.auth.currentUser;
+  router = inject(Router);
 
   constructor() {
     document.body.style.marginLeft = '250px';
@@ -28,6 +31,7 @@ export class SidebarComponent {
 
   logout() {
     this.auth.logout();
-    window.location.href = '/login';
+    this.toast.showToast('Déconnexion réussie !', 'success', 2000);
+    this.router.navigate(['/login']);
   }
 }

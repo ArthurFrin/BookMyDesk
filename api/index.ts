@@ -1,12 +1,12 @@
 import 'dotenv/config';
 import fastify from 'fastify';
 import cors from '@fastify/cors';
-import userRoutes from './src/routes/articleRoutes';
 import prismaPlugin from './src/plugins/prismaPlugin';
 import availabilityRoutes from './src/routes/availability.route';
 import deskRoutes from './src/routes/desk.route';
 import authRoutes from './src/routes/auth.route';
 import jwtPlugin from './src/plugins/jwtPlugin';
+import mailerPlugin from './src/plugins/mailerPlugin';
 
 const app = fastify();
 // Enregistrer le plugin CORS
@@ -16,6 +16,7 @@ app.register(cors, {
 
 app.register(prismaPlugin);
 app.register(jwtPlugin);
+app.register(mailerPlugin);
 
 // Register routes
 app.register(availabilityRoutes, { prefix: '/api' })

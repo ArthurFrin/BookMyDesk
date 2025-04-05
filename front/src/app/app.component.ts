@@ -3,13 +3,14 @@ import { Router, NavigationEnd, ActivatedRoute, RouterOutlet } from '@angular/ro
 import { filter } from 'rxjs/operators';
 import { NgIf } from '@angular/common';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { ToastComponent } from './components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [RouterOutlet, NgIf, SidebarComponent]
+  imports: [RouterOutlet, NgIf, SidebarComponent, ToastComponent]
 })
 export class AppComponent {
   showSidebar = true;

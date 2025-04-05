@@ -1,59 +1,87 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken';
 
-// --- REGISTER ---
 export const register = async (request: FastifyRequest, reply: FastifyReply) => {
-  try {
-    const { email, password, firstName, lastName, photoUrl } = request.body as {
-      email: string
-      password: string
-      firstName: string
-      lastName: string
-      photoUrl?: string
-    }
+  const { email, firstName, lastName, photoUrl } = request.body as {
+    email: string;
+    firstName: string;
+    lastName: string;
+    photoUrl?: string;
+  };
 
-    const prisma = request.server.prisma
+  const prisma = request.server.prisma;
 
-    const existingUser = await prisma.user.findUnique({ where: { email } })
-    if (existingUser) {
-      return reply.status(400).send({ error: 'Cet email est déjà utilisé' })
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10)
-
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        firstName,
-        lastName,
-        photoUrl: photoUrl ?? '',
-        isAdmin: false // Par défaut, les nouveaux utilisateurs ne sont pas admin
-      }
-    })
-
-    const token = await reply.jwtSign({ 
-      id: newUser.id, 
-      email: newUser.email,
-      isAdmin: newUser.isAdmin
-    })
-
-    return reply.status(201).send({
-      user: {
-        id: newUser.id,
-        email: newUser.email,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
-        photoUrl: newUser.photoUrl,
-        isAdmin: newUser.isAdmin
-      },
-      token
-    })
-  } catch (error) {
-    request.log.error(error)
-    return reply.status(500).send({ error: "Erreur lors de l'inscription" })
+  const existingUser = await prisma.user.findUnique({ where: { email } });
+  if (existingUser) {
+    return reply.status(400).send({ error: 'Cet email est déjà utilisé' });
   }
-}
+
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      firstName,
+      lastName,
+      photoUrl: photoUrl ?? '',
+      isAdmin: false,
+      password: null
+    }
+  });
+
+  const token = jwt.sign(
+    { userId: newUser.id },
+    process.env.ACTIVATION_TOKEN_SECRET as string,
+    { expiresIn: '1d' }
+  );
+
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
+  const link = `${frontendUrl}/create-password/${token}`;
+  
+  await request.server.mailer.sendMail({
+    from: '"Support" <no-reply@tonapp.com>',
+    to: email,
+    subject: 'Créez votre mot de passe',
+    html: `
+      <p>Bonjour ${firstName},</p>
+      <p>Cliquez sur le lien ci-dessous pour créer votre mot de passe :</p>
+      <p><a href="${link}">${link}</a></p>
+      <p>Ce lien est valable 24h.</p>
+    `
+  });
+
+  return reply.code(201).send({ message: 'Lien de création de mot de passe envoyé.' });
+};
+
+export const createPassword = async (request: FastifyRequest , reply: FastifyReply) => {
+  const { token } = request.body as { token: string };
+  const { password } = request.body as { password: string };
+
+  if (!password) {
+    return reply.status(400).send({ error: 'Mot de passe requis' });
+  }
+
+  let payload;
+  try {
+    payload = jwt.verify(token, process.env.ACTIVATION_TOKEN_SECRET!) as { userId: string };
+  } catch (err: any) {
+    return reply.status(400).send({ error: 'Lien invalide ou expiré' });
+  }
+
+  const prisma = request.server.prisma;
+  const user = await prisma.user.findUnique({ where: { id: Number(payload.userId) } });
+
+  if (!user) return reply.status(404).send({ error: 'Utilisateur introuvable' });
+  if (user.password) return reply.status(400).send({ error: 'Mot de passe déjà défini' });
+
+  const hash = await bcrypt.hash(password, 10);
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { password: hash }
+  });
+
+  return reply.send({ message: 'Mot de passe défini. Vous pouvez maintenant vous connecter.' });
+};
 
 // --- LOGIN ---
 export const login = async (request: FastifyRequest, reply: FastifyReply) => {
@@ -64,6 +92,10 @@ export const login = async (request: FastifyRequest, reply: FastifyReply) => {
     const user = await prisma.user.findUnique({ where: { email } })
     if (!user) {
       return reply.status(401).send({ error: 'Email ou mot de passe incorrect' })
+    }
+
+    if (!user.password) {
+      return reply.status(401).send({ error: 'Email ou mot de passe incorrect' });
     }
 
     const isValid = await bcrypt.compare(password, user.password)
@@ -151,3 +183,40 @@ export const verifyToken = async (request: FastifyRequest, reply: FastifyReply) 
     return reply.status(500).send({ error: 'Erreur lors de la vérification du token' });
   }
 };
+
+export const updateProfile = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const { id } = request.user;
+    const { firstName, lastName, photoUrl } = request.body as {
+      firstName?: string;
+      lastName?: string;
+      photoUrl?: string;
+    };
+
+    const prisma = request.server.prisma;
+
+    const updatedUser = await prisma.user.update({
+      where: { id },
+      data: {
+        firstName,
+        lastName,
+        photoUrl
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        photoUrl: true,
+        isAdmin: true
+      }
+    });
+
+    return reply.send(updatedUser);
+  } catch (error) {
+    request.log.error(error);
+    return reply.status(500).send({ error: 'Erreur lors de la mise à jour du profil' });
+  }
+};
+
+

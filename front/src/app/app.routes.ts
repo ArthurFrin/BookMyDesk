@@ -5,12 +5,14 @@ import { DayAvailabilityPageComponent } from './pages/day-availability-page/day-
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { ProfilePageComponent } from './pages/profile-page/profile-page.component';
 import { loginGuard } from './guards/login.guard';
+import { CreatePasswordPageComponent } from './pages/create-password-page/create-password-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/disponibilite', pathMatch: 'full' },
   { path: 'disponibilite', component: HomePageComponent, canActivate: [loginGuard] },
   { path: 'disponibilite/:date', component: DayAvailabilityPageComponent, canActivate: [loginGuard] },
   { path: 'login', component: LoginPageComponent, data: { hideSidebar: true } },
+  { path: 'create-password/:token', component: CreatePasswordPageComponent, data: { hideSidebar: true } },
   { path: 'profile', component: ProfilePageComponent, canActivate: [loginGuard] },
   { path: '404', component: PageNotFoundComponent, data: { hideSidebar: true } },
   { path: '**', redirectTo: '/404' }
