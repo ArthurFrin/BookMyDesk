@@ -14,6 +14,12 @@ export const routes: Routes = [
   { path: 'login', component: LoginPageComponent, data: { hideSidebar: true } },
   { path: 'create-password/:token', component: CreatePasswordPageComponent, data: { hideSidebar: true } },
   { path: 'profile', component: ProfilePageComponent, canActivate: [loginGuard] },
+  {
+    path: 'admin',
+    loadComponent: () => import('./pages/admin-page/admin-page.component').then(m => m.AdminPageComponent),
+    canActivate: [loginGuard],
+    data: { role: 'admin' } // Spécifie que cette route nécessite un rôle admin
+  },
   { path: '404', component: PageNotFoundComponent, data: { hideSidebar: true } },
   { path: '**', redirectTo: '/404' }
 ];
