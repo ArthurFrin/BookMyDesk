@@ -1,1 +1,150 @@
-<p>admin-page works!</p>
+<div class="container mx-auto px-4 py-8">
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Gestion des Utilisateurs</h1>
+      <button
+        (click)="openCreatePopup()"
+        class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors">
+        <i-lucide [img]="PlusIcon" [size]="18"></i-lucide>
+        Nouvel Utilisateur
+      </button>
+    </div>
+
+    <!-- Tableau des utilisateurs -->
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Photo</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nom</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Admin</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr *ngFor="let user of users()" class="hover:bg-gray-50">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <img [src]="user.photoUrl" alt="Avatar" class="h-10 w-10 rounded-full">
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm font-medium text-gray-900">{{ user.firstName }} {{ user.lastName }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-500">{{ user.email }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span *ngIf="user.isAdmin" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                Oui
+              </span>
+              <span *ngIf="!user.isAdmin" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
+                Non
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+              <div class="flex space-x-2">
+                <button
+                  (click)="openEditPopup(user)"
+                  class="text-blue-600 hover:text-blue-900">
+                  <i-lucide [img]="EditIcon" [size]="18"></i-lucide>
+                </button>
+                <button
+                  (click)="openDeletePopup(user)"
+                  class="text-red-600 hover:text-red-900">
+                  <i-lucide [img]="Trash2Icon" [size]="18"></i-lucide>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Message si aucun utilisateur -->
+          <tr *ngIf="users().length === 0">
+            <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
+              Aucun utilisateur trouvé
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Popup Création/Édition -->
+<app-popup
+  [isOpen]="showCreateEditPopup"
+  [title]="isEditing ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur'"
+  [message]="''"
+  [buttonText]="'Enregistrer'"
+  (close)="closePopup()"
+  (buttonClick)="saveUser()">
+  <form [formGroup]="userForm" class="space-y-4 p-2">
+    <div class="flex justify-center mb-4">
+      <div class="relative">
+        <img [src]="userForm.get('photoUrl')?.value" alt="Avatar" class="h-20 w-20 rounded-full">
+        <button
+          type="button"
+          (click)="generateNewAvatar()"
+          class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs">
+          ↻
+        </button>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Email</label>
+      <input
+        type="email"
+        formControlName="email"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+        placeholder="email@example.com">
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs mt-1">
+        Email invalide
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Prénom</label>
+      <input
+        type="text"
+        formControlName="firstName"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+        placeholder="Prénom">
+      <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="text-red-500 text-xs mt-1">
+        Prénom requis
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium text-gray-700">Nom</label>
+      <input
+        type="text"
+        formControlName="lastName"
+        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+        placeholder="Nom">
+      <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="text-red-500 text-xs mt-1">
+        Nom requis
+      </div>
+    </div>
+
+    <div class="flex items-center">
+      <input
+        id="isAdmin"
+        type="checkbox"
+        formControlName="isAdmin"
+        class="h-4 w-4 text-blue-600 focus:ring focus:ring-blue-500 focus:ring-opacity-50 border-gray-300 rounded">
+      <label for="isAdmin" class="ml-2 block text-sm text-gray-700">
+        Administrateur
+      </label>
+    </div>
+  </form>
+</app-popup>
+
+<!-- Popup Confirmation Suppression -->
+<app-popup
+  [isOpen]="showDeletePopup"
+  [title]="'Supprimer l\'utilisateur'"
+  [message]="'Êtes-vous sûr de vouloir supprimer l\'utilisateur ' + (userToDelete?.firstName || '') + ' ' + (userToDelete?.lastName || '') + ' ?'"
+  [buttonText]="'Supprimer'"
+  (close)="closePopup()"
+  (buttonClick)="deleteUser()">
+</app-popup>
