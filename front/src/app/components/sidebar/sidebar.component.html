@@ -1,3 +1,11 @@
+<app-popup
+  [isOpen]="showPopup"
+  [title]="'Se Déconnecter'"
+  [message]="'Êtes-vous certain de vouloir vous déconnecter ?'"
+  [buttonText]="'Confirmer'"
+  (close)="closePopup()"
+  (buttonClick)="onConfirm()">
+</app-popup>
 <div class="bg-light-gray-custom fixed top-0 left-0 w-[250px] h-full z-10 px-4 py-8 flex-col gap-4 item-center justify-between md:flex hidden">
   <div class="flex flex-col gap-4">
     <div class="flex text-2xl gap-4 mb-4">
@@ -19,8 +27,14 @@
           <div>Mes réservations</div>
         </a>
       </li>
+      <li *ngIf="user()?.isAdmin">
+        <a [routerLink]="['/admin']" routerLinkActive="active" class="flex gap-2 p-4 rounded-3xl">
+          <i-lucide [img]="ShieldUser" class="my-icon"></i-lucide>
+          <div>Admin</div>
+        </a>
+      </li>
       <li>
-        <button (click)="logout()" class="flex gap-2 text-red-custom p-4 lougout cursor-pointer">
+        <button (click)="openPopup()" class="flex gap-2 text-red-custom p-4 lougout cursor-pointer">
           <i-lucide [img]="LogOutIcon" class="my-icon"></i-lucide>
           <div>Se déconnecter</div>
         </button>

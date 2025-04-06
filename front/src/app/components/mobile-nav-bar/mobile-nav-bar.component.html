@@ -1,4 +1,11 @@
-<!-- NAVBAR MOBILE -->
+<app-popup
+  [isOpen]="showPopup"
+  [title]="'Se Déconnecter'"
+  [message]="'Êtes-vous certain de vouloir vous déconnecter ?'"
+  [buttonText]="'Confirmer'"
+  (close)="closePopup()"
+  (buttonClick)="onConfirm()">
+</app-popup>
 <div class="md:hidden fixed bottom-0 left-0 w-full h-[70px] bg-light-gray-custom border-t z-10 px-6 flex items-center justify-around">
   <a [routerLink]="['/profile']" routerLinkActive="active" class="flex flex-col items-center p-2 rounded-3xl text-sm">
     <i-lucide [img]="UserRoundPen" class="my-icon"></i-lucide>
@@ -8,7 +15,7 @@
     <i-lucide [img]="CalendarCheckIcon" class="my-icon"></i-lucide>
     <span>Réservations</span>
   </a>
-  <button (click)="logout()" class="flex flex-col items-center text-sm text-red-custom">
+  <button (click)="openPopup()" class="flex flex-col items-center text-sm text-red-custom">
     <i-lucide [img]="LogOutIcon" class="my-icon"></i-lucide>
     <span>Logout</span>
   </button>
