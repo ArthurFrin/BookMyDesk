@@ -3,13 +3,13 @@
 </div>
 <nav class="flex flex-col gap-4 items-center">
 
-  <div class="flex gap-2 bg-dark-gray-custom p-2 rounded-full">
+  <div class="flex gap-2 bg-dark-gray-custom p-2 flex-wrap justify-center rounded-full">
     <ng-container *ngFor="let week of weeks()">
       <div class="flex gap-2">
         <ng-container *ngFor="let day of week">
           <div
             *ngIf="!day.isDisabled && !isDayPassed(day.date)"
-            class="bg-light-gray-custom w-12 h-12 flex items-center justify-center rounded-full"
+            class="bg-light-gray-custom w-8 h-8 md:w-12 md:h-12 flex items-center justify-center rounded-full"
             [ngClass]="[
               'day-nav',
               day.color,

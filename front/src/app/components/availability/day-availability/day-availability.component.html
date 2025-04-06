@@ -1,20 +1,26 @@
-<div class="flex w-full justify-between p-16 max-w-5xl m-auto">
+<div class="flex flex-col lg:flex-row w-full justify-between p-1 md:p-16 max-w-5xl m-auto gap-8">
+  <!-- LEFT -->
   <div class="left flex flex-col gap-16">
-    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-86">
+    <!-- Bloc 1 : 2 colonnes x 2 lignes -->
+    <div class="bg-dark-gray-custom grid grid-cols-2 gap-2 p-2 w-54 sm:w-70 md:w-86">
       @for (desk of desks(); track desk.id) {
         @if (desk.id >= 1 && desk.id <= 4) {
           <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
         }
       }
     </div>
-    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-128">
+
+    <!-- Bloc 2 : 3 colonnes x 2 lignes -->
+    <div class="bg-dark-gray-custom grid grid-cols-3 gap-2 p-2 w-80 sm:w-104 md:w-128">
       @for (desk of desks(); track desk.id) {
         @if (desk.id >= 5 && desk.id <= 10) {
           <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
         }
       }
     </div>
-    <div class="bg-dark-gray-custom flex flex-wrap gap-2 p-2 w-128">
+
+    <!-- Bloc 3 : 3 colonnes x 2 lignes -->
+    <div class="bg-dark-gray-custom grid grid-cols-3 gap-2 p-2 w-80 sm:w-104 md:w-128">
       @for (desk of desks(); track desk.id) {
         @if (desk.id >= 11 && desk.id <= 16) {
           <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
@@ -22,15 +28,20 @@
       }
     </div>
   </div>
-  <div class="flex flex-col gap-16 mt-62">
-    <div class="bg-dark-gray-custom flex flex-col gap-2 p-2">
+
+  <!-- RIGHT -->
+  <div class="right flex flex-col items-end gap-16 mt-4 lg:mt-62">
+    <!-- Bloc 4 : 1 colonne x 2 lignes -->
+    <div class="bg-dark-gray-custom grid grid-cols-1 gap-2 p-2">
       @for (desk of desks(); track desk.id) {
         @if (desk.id >= 17 && desk.id <= 18) {
           <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
         }
       }
     </div>
-    <div class="bg-dark-gray-custom flex flex-col gap-2 p-2">
+
+    <!-- Bloc 5 : 1 colonne x 2 lignes -->
+    <div class="bg-dark-gray-custom grid grid-cols-1 gap-2 p-2">
       @for (desk of desks(); track desk.id) {
         @if (desk.id >= 19 && desk.id <= 20) {
           <app-desk (click)="deskAction(desk)" [desk]="desk"></app-desk>
@@ -39,5 +50,3 @@
     </div>
   </div>
 </div>
-
-

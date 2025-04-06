@@ -1,4 +1,4 @@
-<div class="p-32">
+<div class="py-4 md:py-32 lg:px-32">
   <div class="bg-gray-800 text-white p-4 mx-4 rounded-t-md flex justify-between items-center">
     <h2 class="text-lg font-bold">Disponibilités des places</h2>
     <span>{{ currentMonth | uppercase }} - {{ currentYear }}</span>
@@ -8,7 +8,7 @@
     <div *ngFor="let week of weeks()" class="flex flex-col gap-4">
       <div
         *ngFor="let day of week"
-        class="text-left text-dark-gray-custom flex gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
+        class="text-left text-dark-gray-custom flex flex-wrap gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
         [ngClass]="[
           day.color,
           day.userHasReservation ? 'bg-green-custom' : '',
@@ -17,11 +17,13 @@
         ]"
         (click)="navigateToDayAvailability(day)"
       >
-        <div class="font-bold w-12 text-right">
+      <div class="flex gap-2 justify-between">
+        <div class="font-bold text-right">
           {{ day.date | date : 'EEE' | uppercase }}
         </div>
-        <div class="w-10">{{ day.date | date : 'd' }}</div>
-        <div *ngIf="day.available" class="ml-auto text-xs">{{ day.available }} places</div>
+        <div class="">{{ day.date | date : 'd' }}</div>
+      </div>
+        <div *ngIf="day.available" class="md:ml-auto text-xs">{{ day.available }} places</div>
       </div>
     </div>
   </div>

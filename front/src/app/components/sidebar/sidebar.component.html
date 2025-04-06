@@ -1,4 +1,4 @@
-<div class="bg-light-gray-custom fixed top-0 left-0 w-[250px] h-full z-10 px-4 py-8 flex flex-col gap-4 item-center justify-between">
+<div class="bg-light-gray-custom fixed top-0 left-0 w-[250px] h-full z-10 px-4 py-8 flex-col gap-4 item-center justify-between md:flex hidden">
   <div class="flex flex-col gap-4">
     <div class="flex text-2xl gap-4 mb-4">
       <img class="w-16 h-16 rounded-full object-cover" [src]="user()?.photoUrl" alt="test">
@@ -8,13 +8,13 @@
     </div>
     <ul class="flex flex-col gap-2">
       <li>
-        <a [routerLink]="['/profile']" routerLinkActive="active" class="flex gap-2 p-4 rounded-full">
+        <a [routerLink]="['/profile']" routerLinkActive="active" class="flex gap-2 p-4 rounded-3xl">
           <i-lucide [img]="UserRoundPen" class="my-icon"></i-lucide>
           <div>Profile</div>
         </a>
       </li>
       <li>
-        <a [routerLink]="['/disponibilite']" routerLinkActive="active" class="flex gap-2 p-4 rounded-full">
+        <a [routerLink]="['/disponibilite']" routerLinkActive="active" class="flex gap-2 p-4 rounded-3xl">
           <i-lucide [img]="CalendarCheckIcon" class="my-icon"></i-lucide>
           <div>Mes réservations</div>
         </a>

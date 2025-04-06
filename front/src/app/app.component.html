@@ -1,3 +1,11 @@
 <app-toast></app-toast>
-<app-sidebar *ngIf="showSidebar"></app-sidebar>
-<router-outlet></router-outlet>
+<app-sidebar *ngIf="showSidebar" />
+<app-mobile-nav-bar *ngIf="showSidebar" />
+<div
+  [ngClass]="{
+    'md:pl-[250px] pb-[70px] md:pb-0': showSidebar,
+    'p-0': !showSidebar
+  }"
+>
+  <router-outlet></router-outlet>
+</div>

@@ -1,29 +1,29 @@
-import { Component, inject, effect } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule, CalendarCheckIcon, LogOutIcon, UserRoundPen } from 'lucide-angular';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'app-sidebar',
-  standalone: true,
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css'],
+  selector: 'app-mobile-nav-bar',
   imports: [RouterLink, RouterLinkActive, LucideAngularModule],
+  templateUrl: './mobile-nav-bar.component.html',
+  styleUrl: './mobile-nav-bar.component.css'
 })
-export class SidebarComponent {
+export class MobileNavBarComponent {
   CalendarCheckIcon = CalendarCheckIcon;
   LogOutIcon = LogOutIcon;
   UserRoundPen = UserRoundPen;
-
   auth = inject(AuthService);
   toast = inject(ToastService);
-  user = this.auth.currentUser;
   router = inject(Router);
+
 
   logout() {
     this.auth.logout();
     this.toast.showToast('Déconnexion réussie !', 'success', 2000);
     this.router.navigate(['/login']);
   }
+
+
 }
