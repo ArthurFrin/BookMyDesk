@@ -50,8 +50,8 @@ export class AdminPageComponent implements OnInit {
         this.users.set(users);
       },
       error: (error) => {
-        this.toastService.showToast('Erreur lors du chargement des utilisateurs', 'error', 3000);
-        console.error('Erreur lors du chargement des utilisateurs', error);
+        this.toastService.showToast('Erreur lors du chargement des utilisateur·ices', 'error', 3000);
+        console.error('Erreur lors du chargement des utilisateur·ices', error);
       }
     });
   }
@@ -88,26 +88,26 @@ export class AdminPageComponent implements OnInit {
       // Mise à jour d'un utilisateur existant
       this.adminService.updateUser(this.currentUser.id, userData).subscribe({
         next: (updatedUser) => {
-          this.toastService.showToast('Utilisateur mis à jour avec succès', 'success', 2000);
+          this.toastService.showToast('Utilisateur·ice mis à jour avec succès', 'success', 3000);
           this.loadUsers();
           this.closePopup();
         },
         error: (error) => {
-          this.toastService.showToast('Erreur lors de la mise à jour de l\'utilisateur', 'error', 3000);
-          console.error('Erreur lors de la mise à jour de l\'utilisateur', error);
+          this.toastService.showToast('Erreur lors de la mise à jour de l\'utilisateur·ice', 'error', 3000);
+          console.error('Erreur lors de la mise à jour de l\'utilisateur·ice', error);
         }
       });
     } else {
       // Création d'un nouvel utilisateur
       this.adminService.createUser(userData).subscribe({
         next: (newUser) => {
-          this.toastService.showToast('Utilisateur créé avec succès', 'success', 2000);
+          this.toastService.showToast('Utilisateur·ices créé avec succès, email envoyé', 'success', 3000);
           this.loadUsers();
           this.closePopup();
         },
         error: (error) => {
-          this.toastService.showToast('Erreur lors de la création de l\'utilisateur', 'error', 3000);
-          console.error('Erreur lors de la création de l\'utilisateur', error);
+          this.toastService.showToast('Erreur lors de la création de l\'utilisateur·ice', 'error', 3000);
+          console.error('Erreur lors de la création de l\'utilisateur·ice', error);
         }
       });
     }
@@ -118,13 +118,13 @@ export class AdminPageComponent implements OnInit {
 
     this.adminService.deleteUser(this.userToDelete.id).subscribe({
       next: () => {
-        this.toastService.showToast('Utilisateur supprimé avec succès', 'success', 2000);
+        this.toastService.showToast('Utilisateur·ice supprimé avec succès', 'success', 3000);
         this.loadUsers();
         this.closeDeletePopup();
       },
       error: (error) => {
-        this.toastService.showToast('Erreur lors de la suppression de l\'utilisateur', 'error', 3000);
-        console.error('Erreur lors de la suppression de l\'utilisateur', error);
+        this.toastService.showToast('Erreur lors de la suppression de l\'utilisateur·ice', 'error', 3000);
+        console.error('Erreur lors de la suppression de l\'utilisateur·ice', error);
       }
     });
   }
