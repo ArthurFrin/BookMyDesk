@@ -1,21 +1,19 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin.service';
 import { User } from '../../interfaces/user';
 import { ToastService } from '../../services/toast.service';
 import { LucideAngularModule, PlusIcon, EditIcon, Trash2Icon } from 'lucide-angular';
+import { UserPopupComponent } from '../../components/user-popup/user-popup.component';
 import { PopupComponent } from '../../components/popup/popup.component';
-import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'app-admin-page',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
     LucideAngularModule,
+    UserPopupComponent,
     PopupComponent
   ],
   templateUrl: './admin-page.component.html',
@@ -24,7 +22,6 @@ import { v4 as uuidv4 } from 'uuid';
 export class AdminPageComponent implements OnInit {
   private adminService = inject(AdminService);
   private toastService = inject(ToastService);
-  private fb = inject(FormBuilder);
 
   // Icons
   PlusIcon = PlusIcon;
@@ -35,24 +32,13 @@ export class AdminPageComponent implements OnInit {
   users = signal<User[]>([]);
 
   // État du formulaire
-  userForm: FormGroup;
   isEditing = false;
-  currentUserId: number | null = null;
+  currentUser: User | null = null;
 
   // État des popups
   showCreateEditPopup = false;
   showDeletePopup = false;
   userToDelete: User | null = null;
-
-  constructor() {
-    this.userForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      isAdmin: [false],
-      photoUrl: ['https://api.dicebear.com/9.x/thumbs/svg?seed=' + uuidv4()]
-    });
-  }
 
   ngOnInit(): void {
     this.loadUsers();
@@ -72,27 +58,13 @@ export class AdminPageComponent implements OnInit {
 
   openCreatePopup(): void {
     this.isEditing = false;
-    this.currentUserId = null;
-    this.userForm.reset({
-      email: '',
-      firstName: '',
-      lastName: '',
-      isAdmin: false,
-      photoUrl: 'https://api.dicebear.com/9.x/thumbs/svg?seed=' + uuidv4()
-    });
+    this.currentUser = null;
     this.showCreateEditPopup = true;
   }
 
   openEditPopup(user: User): void {
     this.isEditing = true;
-    this.currentUserId = user.id;
-    this.userForm.patchValue({
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      isAdmin: user.isAdmin || false,
-      photoUrl: user.photoUrl
-    });
+    this.currentUser = user;
     this.showCreateEditPopup = true;
   }
 
@@ -103,27 +75,18 @@ export class AdminPageComponent implements OnInit {
 
   closePopup(): void {
     this.showCreateEditPopup = false;
+    this.currentUser = null;
+  }
+
+  closeDeletePopup(): void {
     this.showDeletePopup = false;
     this.userToDelete = null;
   }
 
-  generateNewAvatar(): void {
-    this.userForm.patchValue({
-      photoUrl: 'https://api.dicebear.com/9.x/thumbs/svg?seed=' + uuidv4()
-    });
-  }
-
-  saveUser(): void {
-    if (this.userForm.invalid) {
-      this.toastService.showToast('Veuillez remplir tous les champs obligatoires', 'error', 3000);
-      return;
-    }
-
-    const userData = this.userForm.value;
-
-    if (this.isEditing && this.currentUserId) {
+  saveUser(userData: any): void {
+    if (this.isEditing && this.currentUser) {
       // Mise à jour d'un utilisateur existant
-      this.adminService.updateUser(this.currentUserId, userData).subscribe({
+      this.adminService.updateUser(this.currentUser.id, userData).subscribe({
         next: (updatedUser) => {
           this.toastService.showToast('Utilisateur mis à jour avec succès', 'success', 2000);
           this.loadUsers();
@@ -157,7 +120,7 @@ export class AdminPageComponent implements OnInit {
       next: () => {
         this.toastService.showToast('Utilisateur supprimé avec succès', 'success', 2000);
         this.loadUsers();
-        this.closePopup();
+        this.closeDeletePopup();
       },
       error: (error) => {
         this.toastService.showToast('Erreur lors de la suppression de l\'utilisateur', 'error', 3000);

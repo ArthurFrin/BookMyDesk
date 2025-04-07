@@ -1,23 +1,27 @@
 meta {
   name: Register
   type: http
-  seq: 2
+  seq: 1
 }
 
 post {
-  url: {{host}}/auth/register
+  url: {{host}}/admin/users
   body: json
-  auth: none
+  auth: bearer
 }
 
 headers {
   Content-Type: application/json
 }
 
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhZnJpbjJAZXh0aWEuZnIiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzQ0MDE0MTI1fQ.xywsqWCDmbbSdB0_ytvwZV8eGREUSD5-Dp4u5PJcLpI
+}
+
 body:json {
   {
-    "email": "jeanmich@extia.fr",
-    "firstName": "Jean",
+    "email": "afrin2@exsqdtia.fr",
+    "firstName": "Arthur",
     "lastName": "mich",
     "photoUrl": "https://picsum.photos/seed/newuser/100"
   }

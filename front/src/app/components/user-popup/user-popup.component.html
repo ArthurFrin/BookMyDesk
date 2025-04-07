@@ -1,0 +1,96 @@
+<!-- Modal container -->
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/30 overflow-y-auto h-full w-full backdrop-blur-sm z-50 flex items-center justify-center" (click)="onBackdropClick($event)">
+  <div class="relative mx-auto p-5 w-full max-w-md bg-light-gray-custom rounded-lg shadow-lg">
+    <!-- Modal header -->
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-semibold text-dark-gray-custom">
+        {{ isEditing ? 'Modifier l\'utilisateur·ice' : 'Nouvel·le utilisateur·ice' }}
+      </h3>
+      <button
+        type="button"
+        (click)="onClose()"
+        class="text-gray-400 hover:text-gray-600">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal body -->
+    <form [formGroup]="userForm" class="space-y-4">
+      <div class="flex justify-center mb-4">
+        <div class="relative">
+          <img [src]="userForm.get('photoUrl')?.value" alt="Avatar" class="h-20 w-20 rounded-full">
+          <button type="button"
+          class="p-1 absolute bottom-0 right-0 text-dark-gray-custom bg-aqua-green-custom rounded-full cursor-pointer active:-rotate-90"
+          (click)="generateNewAvatar()">
+          <i-lucide [img]="RefreshCcw" [size]="16" class="my-icon"></i-lucide>
+        </button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="email@example.com">
+        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs mt-1">
+          Email invalide
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Prénom</label>
+        <input
+          type="text"
+          formControlName="firstName"
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Prénom">
+        <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="text-red-500 text-xs mt-1">
+          Prénom requis
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Nom</label>
+        <input
+          type="text"
+          formControlName="lastName"
+          class="w-full px-3 py-2 mt-1 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+          placeholder="Nom">
+        <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="text-red-500 text-xs mt-1">
+          Nom requis
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <input
+          id="isAdmin"
+          type="checkbox"
+          formControlName="isAdmin"
+          class="h-4 w-4 text-blue-600 focus:ring focus:ring-blue-500 border-gray-300 rounded">
+        <label for="isAdmin" class="ml-2 block text-sm text-gray-700">
+          Administrateur
+        </label>
+      </div>
+
+      <div class="flex justify-end gap-2 mt-6">
+        <button
+          type="button"
+          (click)="onClose()"
+          class="px-4 py-2 bg-gray-300 text-gray-800 rounded-3xl hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+          Annuler
+        </button>
+        <button
+          type="button"
+          (click)="onSave()"
+          [disabled]="userForm.invalid"
+          class="cursor-pointer px-8 py-2 bg-cyan-200 rounded-3xl hover:bg-cyan-300 focus:outline-none focus:ring focus:ring-cyan-300 disabled:opacity-50 disabled:cursor-not-allowed ">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

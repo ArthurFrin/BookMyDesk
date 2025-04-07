@@ -1,23 +1,23 @@
 import { FastifyInstance } from 'fastify'
-import { register, login, getProfile, verifyToken, createPassword, updateProfile } from '../controllers/auth.controller'
+import { login, getProfile, verifyToken, createPassword, updateProfile } from '../controllers/auth.controller'
 
 
 export default async function authRoutes(fastify: FastifyInstance) {
-  // Route d'inscription
-  fastify.post('/auth/register', {
-    schema: {
-      body: {
-        type: 'object',
-        required: ['email', 'firstName', 'lastName'],
-        properties: {
-          email: { type: 'string', format: 'email' },
-          firstName: { type: 'string' },
-          lastName: { type: 'string' },
-          photoUrl: { type: 'string' }
-        }
-      }
-    }
-  }, register)
+  // // Route d'inscription
+  // fastify.post('/auth/register', {
+  //   schema: {
+  //     body: {
+  //       type: 'object',
+  //       required: ['email', 'firstName', 'lastName'],
+  //       properties: {
+  //         email: { type: 'string', format: 'email' },
+  //         firstName: { type: 'string' },
+  //         lastName: { type: 'string' },
+  //         photoUrl: { type: 'string' }
+  //       }
+  //     }
+  //   }
+  // }, register)
 
   // route de creation du password
   fastify.post('/auth/create-password', {

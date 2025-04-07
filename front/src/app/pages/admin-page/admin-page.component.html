@@ -1,16 +1,16 @@
 <div class="container mx-auto px-4 py-8">
-  <div class="bg-white rounded-lg shadow-md p-6">
+  <div class="bg-white p-6">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Gestion des Utilisateurs</h1>
+      <h1 class="text-2xl font-bold text-dark-gray-custom">Gestion des Utilisateur·ices</h1>
       <button
         (click)="openCreatePopup()"
-        class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors">
+        class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-3xl cursor-pointer transition-colors">
         <i-lucide [img]="PlusIcon" [size]="18"></i-lucide>
-        Nouvel Utilisateur
+        Nouvel·le Utilisateur·ice
       </button>
     </div>
 
-    <!-- Tableau des utilisateurs -->
+    <!-- Tableau des utilisateur·ices -->
     <div class="overflow-x-auto">
       <table class="min-w-full bg-white border border-gray-200">
         <thead class="bg-gray-100">
@@ -28,7 +28,7 @@
               <img [src]="user.photoUrl" alt="Avatar" class="h-10 w-10 rounded-full">
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
-              <div class="text-sm font-medium text-gray-900">{{ user.firstName }} {{ user.lastName }}</div>
+              <div class="text-sm font-medium text-dark-gray-custom">{{ user.firstName }} {{ user.lastName }}</div>
             </td>
             <td class="px-6 py-4 whitespace-nowrap">
               <div class="text-sm text-gray-500">{{ user.email }}</div>
@@ -57,10 +57,10 @@
             </td>
           </tr>
 
-          <!-- Message si aucun utilisateur -->
+          <!-- Message si aucun utilisateur·ice -->
           <tr *ngIf="users().length === 0">
             <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-              Aucun utilisateur trouvé
+              Aucun·e utilisateur·ice trouvé·e
             </td>
           </tr>
         </tbody>
@@ -69,82 +69,21 @@
   </div>
 </div>
 
-<!-- Popup Création/Édition -->
-<app-popup
+<!-- Composant User Popup pour création/édition -->
+<app-user-popup
   [isOpen]="showCreateEditPopup"
-  [title]="isEditing ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur'"
-  [message]="''"
-  [buttonText]="'Enregistrer'"
+  [isEditing]="isEditing"
+  [user]="currentUser"
   (close)="closePopup()"
-  (buttonClick)="saveUser()">
-  <form [formGroup]="userForm" class="space-y-4 p-2">
-    <div class="flex justify-center mb-4">
-      <div class="relative">
-        <img [src]="userForm.get('photoUrl')?.value" alt="Avatar" class="h-20 w-20 rounded-full">
-        <button
-          type="button"
-          (click)="generateNewAvatar()"
-          class="absolute bottom-0 right-0 bg-blue-500 text-white rounded-full p-1 text-xs">
-          ↻
-        </button>
-      </div>
-    </div>
+  (save)="saveUser($event)">
+</app-user-popup>
 
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Email</label>
-      <input
-        type="email"
-        formControlName="email"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        placeholder="email@example.com">
-      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-red-500 text-xs mt-1">
-        Email invalide
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Prénom</label>
-      <input
-        type="text"
-        formControlName="firstName"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        placeholder="Prénom">
-      <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="text-red-500 text-xs mt-1">
-        Prénom requis
-      </div>
-    </div>
-
-    <div>
-      <label class="block text-sm font-medium text-gray-700">Nom</label>
-      <input
-        type="text"
-        formControlName="lastName"
-        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
-        placeholder="Nom">
-      <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="text-red-500 text-xs mt-1">
-        Nom requis
-      </div>
-    </div>
-
-    <div class="flex items-center">
-      <input
-        id="isAdmin"
-        type="checkbox"
-        formControlName="isAdmin"
-        class="h-4 w-4 text-blue-600 focus:ring focus:ring-blue-500 focus:ring-opacity-50 border-gray-300 rounded">
-      <label for="isAdmin" class="ml-2 block text-sm text-gray-700">
-        Administrateur
-      </label>
-    </div>
-  </form>
-</app-popup>
-
-<!-- Popup Confirmation Suppression -->
+<!-- Popup de confirmation de suppression -->
 <app-popup
   [isOpen]="showDeletePopup"
-  [title]="'Supprimer l\'utilisateur'"
-  [message]="'Êtes-vous sûr de vouloir supprimer l\'utilisateur ' + (userToDelete?.firstName || '') + ' ' + (userToDelete?.lastName || '') + ' ?'"
+  [title]="'Supprimer l\'utilisateur·ice'"
+  [message]="'Êtes-vous sûr de vouloir supprimer l\'utilisateur·ice ' + (userToDelete?.firstName || '') + ' ' + (userToDelete?.lastName || '') + ' ?'"
   [buttonText]="'Supprimer'"
-  (close)="closePopup()"
+  (close)="closeDeletePopup()"
   (buttonClick)="deleteUser()">
 </app-popup>

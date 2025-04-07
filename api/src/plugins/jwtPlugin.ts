@@ -17,4 +17,22 @@ export default fp(async (fastify) => {
       }
     }
   )
+
+  fastify.decorate(
+    'authenticateAdmin',
+    async function (request: FastifyRequest, reply: FastifyReply) {
+      try {
+        await request.jwtVerify()
+        
+        // Vérifier si l'utilisateur est un administrateur
+        const user = request.user as { id: number; isAdmin?: boolean }
+        
+        if (!user.isAdmin) {
+          return reply.status(403).send({ error: 'Accès refusé. Droits d\'administrateur requis.' })
+        }
+      } catch (err) {
+        reply.status(401).send({ error: 'Non autorisé' })
+      }
+    }
+  )
 })

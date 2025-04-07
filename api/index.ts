@@ -5,6 +5,7 @@ import prismaPlugin from './src/plugins/prismaPlugin';
 import availabilityRoutes from './src/routes/availability.route';
 import deskRoutes from './src/routes/desk.route';
 import authRoutes from './src/routes/auth.route';
+import adminRoutes from './src/routes/admin.route';
 import jwtPlugin from './src/plugins/jwtPlugin';
 import mailerPlugin from './src/plugins/mailerPlugin';
 
@@ -22,6 +23,7 @@ app.register(mailerPlugin);
 app.register(availabilityRoutes, { prefix: '/api' })
 app.register(deskRoutes, { prefix: '/api' })
 app.register(authRoutes, { prefix: '/api' })
+app.register(adminRoutes, { prefix: '/api' })
 
 // Health check endpoint
 app.get('/ping', async (request, reply) => {
