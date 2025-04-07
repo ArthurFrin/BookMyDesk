@@ -97,3 +97,87 @@ export const promoteUser = async (request: FastifyRequest, reply: FastifyReply) 
     return reply.status(500).send({ error: 'Erreur lors de la promotion de l\'utilisateur' });
   }
 };
+
+export const updateUser = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const { id } = request.params as { id: string };
+    const { firstName, lastName, email, photoUrl, isAdmin } = request.body as {
+      firstName?: string;
+      lastName?: string;
+      email?: string;
+      photoUrl?: string;
+      isAdmin?: boolean;
+    };
+
+    const prisma = request.server.prisma;
+
+    // Vérifier si l'email est déjà utilisé par un autre utilisateur
+    if (email) {
+      const existingUser = await prisma.user.findFirst({
+        where: {
+          email,
+          id: { not: parseInt(id) }
+        }
+      });
+
+      if (existingUser) {
+        return reply.status(400).send({ error: 'Cet email est déjà utilisé par un autre utilisateur' });
+      }
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: parseInt(id) },
+      data: {
+        ...(firstName !== undefined && { firstName }),
+        ...(lastName !== undefined && { lastName }),
+        ...(email !== undefined && { email }),
+        ...(photoUrl !== undefined && { photoUrl }),
+        ...(isAdmin !== undefined && { isAdmin })
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        photoUrl: true,
+        isAdmin: true
+      }
+    });
+
+    return reply.send(updatedUser);
+  } catch (error) {
+    request.log.error(error);
+    return reply.status(500).send({ error: 'Erreur lors de la mise à jour de l\'utilisateur·ice' });
+  }
+};
+
+export const deleteUser = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const { id } = request.params as { id: string };
+    const prisma = request.server.prisma;
+
+    // Vérifier si l'utilisateur existe
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(id) }
+    });
+
+    if (!user) {
+      return reply.status(404).send({ error: 'Utilisateur·ice non trouvé·e' });
+    }
+
+    // Supprimer d'abord les réservations liées à cet utilisateur
+    await prisma.reservation.deleteMany({
+      where: { userId: parseInt(id) }
+    });
+
+    // Supprimer l'utilisateur
+    await prisma.user.delete({
+      where: { id: parseInt(id) }
+    });
+
+    return reply.send({ message: 'Utilisateur·ice supprimé·e avec succès' });
+  } catch (error) {
+    request.log.error(error);
+    return reply.status(500).send({ error: 'Erreur lors de la suppression de l\'utilisateur·ice' });
+  }
+};

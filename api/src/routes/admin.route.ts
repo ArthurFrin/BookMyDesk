@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify'
-import { register, getAllUsers, promoteUser } from '../controllers/admin.controller'
+import { register, getAllUsers, promoteUser, updateUser, deleteUser } from '../controllers/admin.controller'
 
 export default async function adminRoutes(fastify: FastifyInstance) {
   // Toutes les routes admin sont protégées par le middleware authenticateAdmin
@@ -39,4 +39,42 @@ export default async function adminRoutes(fastify: FastifyInstance) {
       }
     }
   }, promoteUser)
+
+  // Route pour mettre à jour un utilisateur (PUT)
+  fastify.put('/admin/users/:id', {
+    onRequest: [fastify.authenticateAdmin],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string' }
+        }
+      },
+      body: {
+        type: 'object',
+        properties: {
+          email: { type: 'string', format: 'email' },
+          firstName: { type: 'string' },
+          lastName: { type: 'string' },
+          photoUrl: { type: 'string' },
+          isAdmin: { type: 'boolean' }
+        }
+      }
+    }
+  }, updateUser)
+
+  // Route pour supprimer un utilisateur (DELETE)
+  fastify.delete('/admin/users/:id', {
+    onRequest: [fastify.authenticateAdmin],
+    schema: {
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string' }
+        }
+      }
+    }
+  }, deleteUser)
 }
