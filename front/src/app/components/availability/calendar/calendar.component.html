@@ -11,7 +11,7 @@
         class="text-left text-dark-gray-custom flex flex-wrap gap-2 p-4 items-center rounded shadow cursor-pointer transition-all"
         [ngClass]="[
           day.color,
-          day.userHasReservation ? 'bg-green-custom' : '',
+          day.userHasReservation ? 'bg-green-custom!' : '',
           day.isDisabled ? 'pointer-events-none cursor-not-allowed text-white' : 'hover:brightness-90',
           isDayPassed(day.date) ? 'text-gray-500 pointer-events-none cursor-not-allowed' : '',
         ]"

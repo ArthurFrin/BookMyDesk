@@ -1,0 +1,31 @@
+meta {
+  name: update user
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{host}}/admin/users/{{id}}
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "photoUrl": "https://api.dicebear.com/9.x/thumbs/svg?seed={{seed}}"
+  }
+  
+}
+
+vars:pre-request {
+  id: 2
+  firstName: user
+  lastName: example
+  seed: example
+}

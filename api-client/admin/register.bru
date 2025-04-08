@@ -15,16 +15,23 @@ headers {
 }
 
 auth:bearer {
-  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhZnJpbjJAZXh0aWEuZnIiLCJpc0FkbWluIjpmYWxzZSwiaWF0IjoxNzQ0MDE0MTI1fQ.xywsqWCDmbbSdB0_ytvwZV8eGREUSD5-Dp4u5PJcLpI
+  token: {{token}}
 }
 
 body:json {
   {
-    "email": "afrin2@exsqdtia.fr",
-    "firstName": "Arthur",
-    "lastName": "mich",
-    "photoUrl": "https://picsum.photos/seed/newuser/100"
+    "email": "{{email}}",
+    "firstName": "{{firstName}}",
+    "lastName": "{{lastName}}",
+    "photoUrl": "https://api.dicebear.com/9.x/thumbs/svg?seed={{firstName}}{{lastName}}"
   }
+  
+}
+
+vars:pre-request {
+  firstName: user
+  lastName: example
+  email: user@example.fr
 }
 
 docs {
