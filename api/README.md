@@ -1,7 +1,7 @@
-# API meet at the office
+# API Book My Desk
 
 ## Description
-API backend pour l'application "Meet at the Office", permettant la gestion des réservations de bureaux, des utilisateurs et des disponibilités.
+API backend pour l'application "Book My Desk", permettant la gestion des réservations de bureaux, des utilisateurs et des disponibilités.
 
 ## Technologies utilisées
 - [Node.js](https://nodejs.org/)
@@ -108,3 +108,10 @@ api-client/
 ## Remarques
 - Veillez à ce que votre base de données soit accessible selon les paramètres définis dans votre fichier `.env`
 - Pour les développeurs, il est recommandé de générer le client Prisma après chaque modification du schéma
+
+## login par defaut:
+
+{
+  "email": "alice.dupond@domain.fr",
+  "password": "password"
+}

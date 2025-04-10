@@ -1,4 +1,4 @@
-# Frontend meet at the office
+# Frontend Book My Desk
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
 

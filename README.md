@@ -1,7 +1,7 @@
-# Meet at the Office
+# Book My Desk
 
 ## Description
-**Meet at the Office** est une application web permettant aux employés de réserver des bureaux dans un espace de travail partagé. Cette solution facilite la gestion des espaces de travail flexibles en offrant une visualisation claire des disponibilités et un système simple de réservation.
+**Book My Desk** est une application web permettant aux employés de réserver des bureaux dans un espace de travail partagé. Cette solution facilite la gestion des espaces de travail flexibles en offrant une visualisation claire des disponibilités et un système simple de réservation.
 
 ## Fonctionnalités principales
 - 📅 **Visualisation des disponibilités** : Calendrier interactif montrant les places disponibles
